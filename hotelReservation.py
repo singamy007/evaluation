@@ -1,4 +1,5 @@
 # Hotel Reservation System
+from autogen import AssistantAgent,UserProxyAgent
 
 # A dictionary to store room details and their availability , its a global variable 
 hotel_rooms = {
@@ -9,6 +10,18 @@ hotel_rooms = {
     105: {"type": "Double", "price": 150, "available": True}
 }
 
+config_list=[
+    
+    {
+        "base_url":"http://35.244.13.63:11434/v1",
+        "model":"llama3.2:latest",
+        "api_key":"ollama"
+    }
+]
+
+assistant=AssistantAgent("Ai",llm_config={"config_list":config_list})
+
+user_proxy=UserProxyAgent("user",code_execution_config=False)
 # A dictionary to store bookings: room number mapped to guest details
 bookings = {}
 
@@ -87,4 +100,5 @@ def main():
 
 # Run the main function
 if __name__ == "__main__":
+    response=user_proxy.initiate_chat(assistant,message=task)
     main()
